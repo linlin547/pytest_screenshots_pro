@@ -1,0 +1,4 @@
+{
+  "scripts/test_cpp.py::TestDemo::()::test_app[http://www.baidu.com-baidu]": true, 
+  "scripts/test_cpp.py::TestDemo::()::test_app[http://www.taobao.com-taobao]": true
+}
