@@ -3,10 +3,12 @@
 import pytest,time,os
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 driver = None
 browser = None
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
+    # 失败截图
     pytest_html = item.config.pluginmanager.getplugin('html')
     outcome = yield
     report = outcome.get_result()
@@ -24,15 +26,19 @@ def pytest_runtest_makereport(item):
         report.extra = extra
 
 def _capture_screenshot(name):
-    re = driver.get_screenshot_as_file(name)
+    # 截图
+    driver.get_screenshot_as_file(name)
+def pytest_cmdline_main(config):
+    # 从命令行参数中取参数值
+    global browser
+    browser=config.getoption("--browser")[0]
 
 def pytest_addoption(parser):
     # 添加参数
     parser.addoption("--browser", action="append",default = [], help="run by browser driver")
+
 def pytest_generate_tests(metafunc):
     # 将参数添加到parametrize
-    global browser
-    browser = metafunc.config.option.browser[0]
     if 'browser' in metafunc.fixturenames:
         metafunc.parametrize("browser", metafunc.config.option.browser)
 
@@ -49,8 +55,11 @@ def app():
             "type": DesiredCapabilities.FIREFOX,
         },
     }
-    driver = webdriver.Remote(
-        command_executor=browserMap.get(browser).get("url"),
-        desired_capabilities=browserMap.get(browser).get("type")
-    )
+    try:
+        driver = webdriver.Remote(
+            command_executor=browserMap.get(browser).get("url"),
+            desired_capabilities=browserMap.get(browser).get("type")
+        )
+    except Exception,e:
+        print e.message
     return driver
