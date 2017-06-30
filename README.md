@@ -1,4 +1,4 @@
-# 搜集selenium的一些常用知识
+# selenium启动节点
   * 使用Grid</br>
     * 必须先启动hub：Java -jar selenium-server-standalone-3.3.0.jar -role hub</br>
     * 启动节点，改变端口即可：Java -jar selenium-server-standalone-3.3.0.jar -role node -port 5555 -hub http://27.0.0.1:4444/grid/register </br>
@@ -18,7 +18,7 @@
     </pre></code>
 
 
-# pytest_screenshots_pro
+# 报告截图
 * control.py 控制执行文件
 * 报告展示
 ![feature](https://github.com/linlin547/pytest_screenshots_pro/blob/master/worker/report_demo.png)
